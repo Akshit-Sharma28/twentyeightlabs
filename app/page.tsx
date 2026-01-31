@@ -1,65 +1,148 @@
-import Image from "next/image";
+import Header from "./components/Header";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="bg-black text-white min-h-screen">
+      <Header />
+
+      {/* =========================
+          HERO
+         ========================= */}
+      <section className="pt-36 pb-24 px-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-12 items-start">
+          
+          {/* LEFT */}
+          <div className="col-span-12 lg:col-span-7 relative">
+            {/* Vertical accent rail */}
+            <div className="absolute left-[-24px] top-2 h-full w-px bg-gradient-to-b from-cyan-400/40 to-transparent" />
+
+            <h1 className="text-5xl md:text-7xl font-extrabold leading-[1.05] mb-6">
+              Security & AI Research
+              <span className="block text-gray-400 font-semibold text-3xl md:text-4xl mt-3">
+                for Modern Systems
+              </span>
+            </h1>
+
+            <p className="text-xl text-gray-300 max-w-2xl mb-10">
+              Twenty Eight Labs explores emerging attack surfaces across
+              applications, infrastructure, and AI-powered systems.
+            </p>
+
+            <div className="flex gap-3 flex-wrap">
+              {["AI Security", "LLM Testing", "AppSec"].map((tag) => (
+                <span
+                  key={tag}
+                  className="px-4 py-2 text-sm border border-gray-700 rounded-full text-gray-300 hover:border-cyan-400/50 hover:text-white transition"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT */}
+          <div className="col-span-12 lg:col-span-5">
+            <div className="border border-gray-800 rounded-xl p-8 bg-black/40 backdrop-blur">
+              <p className="text-xs uppercase tracking-wider text-gray-500 mb-4">
+                Research Focus
+              </p>
+
+              <ul className="space-y-4 text-sm text-gray-300">
+                <li>• AI misuse & adversarial workflows</li>
+                <li>• LLM threat modeling</li>
+                <li>• Modern application attack paths</li>
+                <li>• Security engineering for AI systems</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* =========================
+          DETAIL STRIP
+         ========================= */}
+      <section className="max-w-7xl mx-auto px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-gray-800 pt-8">
+          <div>
+            <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">
+              Focus Area
+            </p>
+            <p className="text-sm text-gray-300">
+              AI Security & LLM Threat Modeling
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">
+              Approach
+            </p>
+            <p className="text-sm text-gray-300">
+              Research-driven, exploit-focused, real-world systems
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">
+              Status
+            </p>
+            <p className="text-sm text-gray-300">
+              Independent · Ongoing Research
+            </p>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* =========================
+          DIVIDER
+         ========================= */}
+      <div className="max-w-7xl mx-auto px-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent my-16" />
+      </div>
+
+      {/* =========================
+          AREAS OF FOCUS
+         ========================= */}
+      <section className="max-w-7xl mx-auto px-8 pb-24">
+        <h2 className="text-xl font-semibold mb-12">Areas of Focus</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {[
+            {
+              title: "AI & LLM Security",
+              text: "Prompt injection, model misuse, insecure AI workflows, and real-world exploitation paths in AI systems.",
+            },
+            {
+              title: "Advanced Application Security",
+              text: "Deep testing of modern web, API, and cloud-native applications with a focus on exploitability.",
+            },
+            {
+              title: "Tooling & Frameworks",
+              text: "Building internal tools and research frameworks to analyze new classes of vulnerabilities.",
+            },
+            {
+              title: "Security Engineering",
+              text: "Helping teams design and validate secure architectures for AI-enabled products.",
+            },
+          ].map((item) => (
+            <div
+              key={item.title}
+              className="border border-gray-800 rounded-xl p-6 bg-black/40 hover:border-cyan-400/40 transition"
+            >
+              <h3 className="font-semibold mb-2">{item.title}</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                {item.text}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* =========================
+          FOOTER
+         ========================= */}
+      <footer className="border-t border-gray-800 px-6 py-10 text-center text-xs text-gray-400">
+        © {new Date().getFullYear()} Twenty Eight Labs · Founded by Akshit Sharma
+      </footer>
+    </main>
   );
 }

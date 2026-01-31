@@ -1,26 +1,218 @@
 @import "tailwindcss";
 
+/* ======================================================
+   BASE / RESET
+   ====================================================== */
+
+html,
+body {
+  cursor: none;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 body {
-  background: var(--background);
+  background-color: #000;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(34, 211, 238, 0.06), transparent 40%),
+    radial-gradient(circle at 80% 35%, rgba(34, 211, 238, 0.04), transparent 45%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ======================================================
+   HEADER POLISH
+   ====================================================== */
+
+header {
+  box-shadow: inset 0 -1px 0 rgba(34, 211, 238, 0.18);
+}
+
+/* Brand glyph (28 circle) */
+header .rounded-full {
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.25),
+    0 0 14px rgba(34, 211, 238, 0.18);
+}
+
+/* Scroll-aware header */
+.header-scroll {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.scrolled header {
+  background-color: rgba(0, 0, 0, 0.92);
+  box-shadow: inset 0 -1px 0 rgba(34, 211, 238, 0.25);
+}
+
+/* ======================================================
+   ATOMIC CURSOR
+   ====================================================== */
+
+.atomic-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+}
+
+/* Nucleus */
+.atomic-cursor .nucleus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+}
+
+.atomic-cursor .nucleus::before,
+.atomic-cursor .nucleus::after {
+  content: "";
+  position: absolute;
+  background: rgba(34, 211, 238, 0.9);
+}
+
+.atomic-cursor .nucleus::before {
+  width: 10px;
+  height: 1.5px;
+  top: 50%;
+  left: 0;
+}
+
+.atomic-cursor .nucleus::after {
+  width: 1.5px;
+  height: 10px;
+  left: 50%;
+  top: 0;
+}
+
+/* Electron dots */
+.atomic-cursor .electron {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  background: rgba(34, 211, 238, 0.6);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ======================================================
+   TYPOGRAPHY (GLOBAL)
+   ====================================================== */
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.015em;
+}
+
+p {
+  color: rgba(237, 237, 237, 0.85);
+}
+
+/* ======================================================
+   UI HELPERS
+   ====================================================== */
+
+/* Section divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(148, 163, 184, 0.25),
+    transparent
+  );
+}
+
+/* Card pattern */
+.card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+  transition: border-color 0.25s ease;
+}
+
+.card:hover {
+  border-color: rgba(34, 211, 238, 0.35);
+}
+
+/* ======================================================
+   RESEARCH / MDX TYPOGRAPHY
+   ====================================================== */
+
+/* Tailwind prose overrides */
+.prose {
+  --tw-prose-body: #d1d5db;
+  --tw-prose-headings: #ffffff;
+  --tw-prose-links: #22d3ee;
+  --tw-prose-bold: #ffffff;
+  --tw-prose-code: #22d3ee;
+  --tw-prose-quotes: #9ca3af;
+  --tw-prose-hr: #374151;
+}
+
+/* Headings */
+.prose h1 {
+  font-size: 2.25rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid #1f2933;
+  padding-bottom: 0.4rem;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+/* Body */
+.prose p {
+  line-height: 1.7;
+}
+
+.prose ul {
+  margin-left: 1.25rem;
+}
+
+.prose li {
+  margin: 0.4rem 0;
+}
+
+/* Code */
+.prose pre {
+  background-color: #020617;
+  border: 1px solid #1f2933;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.prose code {
+  background-color: rgba(34, 211, 238, 0.08);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.375rem;
+}
+
+/* Anchor offset for fixed header */
+.prose h2,
+.prose h3 {
+  scroll-margin-top: 120px;
 }
