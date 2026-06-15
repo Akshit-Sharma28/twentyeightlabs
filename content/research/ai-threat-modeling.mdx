@@ -1,0 +1,86 @@
+# Threat Modeling AI Systems
+
+**Published:** January 2026  
+**Author:** Twenty Eight Labs
+
+---
+
+## Overview
+
+AI-enabled systems change the shape of application security because model
+behavior, user intent, retrieved context, and tool execution all meet inside one
+runtime.
+
+Traditional threat modeling still matters, but it needs to be extended around:
+
+- Prompt and context boundaries
+- Tool permissions
+- Data retrieval paths
+- Agent autonomy
+- Human approval points
+
+The practical question is not just whether a model can be tricked. The stronger
+question is what the system allows the model to do after it is tricked.
+
+---
+
+## Core Assets
+
+Start by identifying the assets that an AI workflow can access or influence:
+
+- System prompts and policy instructions
+- User data and uploaded documents
+- Retrieved knowledge base content
+- API keys, tokens, and delegated permissions
+- External tools, webhooks, and action endpoints
+
+Each asset should have a clear owner, access rule, audit trail, and fallback
+behavior when the model response is uncertain.
+
+---
+
+## Trust Boundaries
+
+AI products often blur boundaries between trusted and untrusted content. A user
+message, web page, document, or API response may all become part of the model
+context.
+
+Useful boundaries include:
+
+- User input versus developer instructions
+- Retrieved content versus verified system state
+- Model recommendations versus executable actions
+- Read-only tools versus write-capable tools
+
+When these boundaries are not explicit, the product becomes harder to test and
+harder to defend.
+
+---
+
+## Abuse Paths
+
+Common AI abuse paths include:
+
+- Prompt injection through user-supplied content
+- Indirect injection through retrieved documents or web pages
+- Excessive agency through broad tool permissions
+- Data leakage through summaries, logs, or generated exports
+- Confused deputy behavior when the model acts with user authority
+
+The highest-risk paths usually combine multiple factors: untrusted context,
+sensitive data, and tools that can create external side effects.
+
+---
+
+## Defensive Priorities
+
+Strong AI threat modeling should produce testable controls:
+
+- Keep privileged instructions out of user-controlled channels
+- Scope tools narrowly and separate read actions from write actions
+- Require human confirmation for destructive or external actions
+- Log model-tool decisions with enough context for review
+- Test with realistic malicious documents, prompts, and workflow states
+
+The goal is not to make model behavior perfect. The goal is to make system
+boundaries resilient when model behavior is imperfect.

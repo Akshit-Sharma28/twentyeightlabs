@@ -2,9 +2,43 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
+type AiStatus = {
+  status: "online" | "fallback" | "offline";
+  label: string;
+};
 
 export default function Header() {
   const pathname = usePathname();
+  const [aiStatus, setAiStatus] = useState<AiStatus>({
+    status: "fallback",
+    label: "Checking AI",
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/atomix/status")
+      .then((response) => response.json())
+      .then((data) => {
+        if (!cancelled) {
+          setAiStatus({
+            status: data.status ?? "fallback",
+            label: data.label ?? "Fallback",
+          });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setAiStatus({ status: "offline", label: "Local AI Offline" });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const navItem = (href: string, label: string) => {
     const active = pathname === href;
@@ -45,11 +79,31 @@ export default function Header() {
         </Link>
 
         {/* Navigation */}
-        <nav className="hidden md:flex items-center gap-10 text-base">
+        <nav className="hidden md:flex items-center gap-8 text-base">
           {navItem("/", "Home")}
           {navItem("/research", "Research")}
           {navItem("/tools", "Tools")}
           {navItem("/about", "About")}
+          <a
+            href="https://atomix.solutions"
+            target="_blank"
+            rel="noreferrer"
+            className="text-gray-400 hover:text-white transition"
+          >
+            Atomix
+          </a>
+          {navItem("/contact", "Contact")}
+          <span
+            className={`rounded-full border px-3 py-1 text-xs ${
+              aiStatus.status === "online"
+                ? "border-emerald-400/40 text-emerald-300"
+                : aiStatus.status === "offline"
+                  ? "border-red-400/40 text-red-300"
+                  : "border-amber-400/40 text-amber-300"
+            }`}
+          >
+            {aiStatus.label}
+          </span>
         </nav>
       </div>
     </header>

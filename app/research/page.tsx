@@ -1,24 +1,6 @@
 import Header from "../components/Header";
-import Link from "next/link";
-
-const research = [
-  {
-    slug: "llm-security-basics",
-    title: "Foundations of LLM Security",
-    date: "2026-01",
-    tag: "LLM Security",
-    summary:
-      "An overview of common attack surfaces in large language models, including prompt injection, data leakage, and misuse patterns.",
-  },
-  {
-    slug: "ai-threat-modeling",
-    title: "Threat Modeling AI Systems",
-    date: "2026-01",
-    tag: "AI Security",
-    summary:
-      "A practical approach to identifying and mitigating threats in AI-enabled architectures.",
-  },
-];
+import ResearchLibrary from "../components/ResearchLibrary";
+import { research } from "../data";
 
 export default function ResearchPage() {
   return (
@@ -30,43 +12,38 @@ export default function ResearchPage() {
           Research
         </h1>
 
-        <p className="text-gray-400 max-w-2xl mb-8">
+        <p className="text-gray-400 max-w-2xl mb-10">
           Published research and ongoing work from Twenty Eight Labs.
         </p>
 
-        {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gray-800 to-transparent mb-12" />
-
-        <div className="space-y-8">
-          {research.map((item) => (
-            <Link
-              key={item.slug}
-              href={`/research/${item.slug}`}
-              className="block border border-gray-800 rounded-xl p-6 bg-black/40 hover:border-cyan-400/40 transition"
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+          {[
+            { label: "Published Notes", value: research.length },
+            {
+              label: "Research Tracks",
+              value: new Set(research.map((item) => item.tag)).size,
+            },
+            {
+              label: "Methods Captured",
+              value: research.reduce(
+                (total, item) => total + item.methods.length,
+                0
+              ),
+            },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-lg border border-gray-800 bg-zinc-950/70 p-5"
             >
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-lg font-semibold">
-                  {item.title}
-                </h2>
-                <span className="text-xs text-gray-500">
-                  {item.date}
-                </span>
-              </div>
-
-              <span className="text-xs uppercase tracking-wider text-gray-500">
-                {item.tag}
-              </span>
-
-              <p className="text-sm text-gray-400 mt-3">
-                {item.summary}
+              <p className="text-2xl font-black text-white">{stat.value}</p>
+              <p className="text-xs uppercase tracking-wider text-gray-500 mt-1">
+                {stat.label}
               </p>
-
-              <span className="text-xs text-cyan-400 mt-4 inline-block">
-                Read →
-              </span>
-            </Link>
+            </div>
           ))}
         </div>
+
+        <ResearchLibrary />
       </section>
     </main>
   );

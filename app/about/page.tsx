@@ -1,4 +1,5 @@
 import Header from "../components/Header";
+import { capabilities, ventures } from "../data";
 
 export default function AboutPage() {
   return (
@@ -14,10 +15,10 @@ export default function AboutPage() {
         </h1>
 
         <p className="text-gray-400 max-w-3xl text-lg leading-relaxed">
-          Twenty Eight Labs is an independent research initiative focused on
-          understanding and securing modern systems at the intersection of
-          application security, artificial intelligence, and emerging
-          technologies.
+          Twenty Eight Labs is the parent company behind Atomix and an
+          independent research studio focused on AI security, application
+          attack surfaces, and products that turn security research into useful
+          systems.
         </p>
       </section>
 
@@ -65,28 +66,46 @@ export default function AboutPage() {
               Independence
             </h2>
             <p className="text-gray-400 leading-relaxed">
-              This is an independent initiative. Research topics are selected
-              based on technical relevance and emerging risk, not commercial
-              alignment. Findings are shared openly whenever possible.
+              Research topics are selected based on technical relevance and
+              emerging risk. Product work, including Atomix, is built from that
+              research loop rather than treated as a separate track.
             </p>
           </div>
         </div>
 
         {/* RIGHT COLUMN */}
         <div className="lg:col-span-5">
-          <div className="border border-gray-800 rounded-xl p-8 bg-black/40 backdrop-blur">
+          <div className="border border-gray-800 rounded-lg p-8 bg-zinc-950/70 backdrop-blur">
             <h3 className="text-sm uppercase tracking-wider text-gray-500 mb-6">
               Focus Areas
             </h3>
 
             <ul className="space-y-4 text-sm text-gray-300">
-              <li>• AI & LLM security research</li>
-              <li>• Threat modeling for AI-enabled systems</li>
-              <li>• Application & API attack surfaces</li>
-              <li>• Cloud-native exploitation paths</li>
-              <li>• Secure system design & validation</li>
+              {capabilities.map((capability) => (
+                <li key={capability.title}>• {capability.title}</li>
+              ))}
             </ul>
           </div>
+        </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto px-8 pb-24">
+        <h2 className="text-xl font-semibold mb-8">Company Portfolio</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {ventures.map((venture) => (
+            <div
+              key={venture.name}
+              className="border border-gray-800 rounded-lg p-6 bg-zinc-950/70"
+            >
+              <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">
+                {venture.label}
+              </p>
+              <h3 className="text-lg font-semibold mb-3">{venture.name}</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                {venture.description}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -95,9 +114,9 @@ export default function AboutPage() {
          ========================= */}
       <section className="max-w-7xl mx-auto px-8 pb-24">
         <p className="text-xs text-gray-500 max-w-2xl">
-          Twenty Eight Labs is not a consultancy or product company. The focus
-          remains on research, experimentation, and long-form analysis of
-          security problems in modern systems.
+          Twenty Eight Labs keeps research, experimentation, and product
+          building close together so the same technical loop can inform public
+          writing, internal tooling, and Atomix.
         </p>
       </section>
     </main>

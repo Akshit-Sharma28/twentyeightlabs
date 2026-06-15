@@ -45,3 +45,6 @@ node_modules
 .env.local
 .env
 .DS_Store
+.ollama-ai-state.json
+.ollama-ai.log
+.atomix-ai-proxy-token

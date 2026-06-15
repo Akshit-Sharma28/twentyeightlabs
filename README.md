@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Twenty Eight Labs
+
+Portfolio, research, and security tooling site for Twenty Eight Labs.
 
 ## Getting Started
 
-First, run the development server:
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Local AI with Ollama
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+No external API key is required for local AI. Install Ollama, then run:
 
-## Learn More
+```bash
+npm run ai:local
+```
 
-To learn more about Next.js, take a look at the following resources:
+Useful commands:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run ai:status
+npm run ai:ask -- "Summarize the current AI security posture in one sentence."
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Defaults:
 
-## Deploy on Vercel
+```bash
+OLLAMA_BASE_URL=http://127.0.0.1:11434
+OLLAMA_MODEL=qwen3:8b
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The helper reports whether Ollama is up, the configured model, loaded models,
+best-effort uptime, and token totals tracked by `npm run ai:ask`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If the model is missing:
+
+```bash
+ollama pull qwen3:8b
+```
+
+The app automatically tries local Ollama in development when `ATOMIX_AI_ENDPOINT`
+is not configured.
+
+## Deployed Apps and Local AI
+
+Production apps cannot reach `127.0.0.1` on your Mac. To let deployed apps use
+local Ollama, run the authenticated proxy and expose that proxy with a secure
+tunnel:
+
+```bash
+npm run ai:local
+npm run ai:proxy
+cloudflared tunnel --url http://127.0.0.1:8787
+```
+
+Use the generated tunnel URL in Vercel:
+
+```bash
+ATOMIX_AI_ENDPOINT=https://your-tunnel.trycloudflare.com/analyze
+ATOMIX_AI_API_KEY=<value printed by npm run ai:proxy>
+```
+
+Do not expose raw Ollama directly to the internet. The proxy requires a bearer
+token for analysis calls and exposes only `/health` and `/analyze`.

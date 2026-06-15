@@ -6,12 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "ai:local": "node scripts/local-ollama-ai.mjs start",
+    "ai:status": "node scripts/local-ollama-ai.mjs status",
+    "ai:ask": "node scripts/local-ollama-ai.mjs ask",
+    "ai:proxy": "node scripts/atomix-ai-proxy.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.1.6",
+    "jspdf": "^4.2.1",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"

@@ -149,6 +149,76 @@ p {
 }
 
 /* ======================================================
+   EIGHT ASSISTANT
+   ====================================================== */
+
+.eight-orb {
+  animation: eight-float 3.8s ease-in-out infinite;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.16),
+    0 0 28px rgba(34, 211, 238, 0.28),
+    inset 0 0 18px rgba(34, 211, 238, 0.12);
+}
+
+.eight-ring {
+  animation: eight-pulse 2.2s ease-in-out infinite;
+}
+
+.eight-starfield::before,
+.eight-starfield::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  background: rgba(103, 232, 249, 0.85);
+  box-shadow:
+    42px 18px 0 rgba(103, 232, 249, 0.55),
+    118px 38px 0 rgba(103, 232, 249, 0.35),
+    260px 26px 0 rgba(103, 232, 249, 0.45),
+    330px 82px 0 rgba(103, 232, 249, 0.3);
+  height: 3px;
+  left: 28px;
+  top: 26px;
+  width: 3px;
+}
+
+.eight-starfield::after {
+  animation: eight-drift 7s linear infinite;
+  opacity: 0.7;
+  top: 80px;
+}
+
+@keyframes eight-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+}
+
+@keyframes eight-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes eight-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-90px);
+  }
+}
+
+/* ======================================================
    RESEARCH / MDX TYPOGRAPHY
    ====================================================== */
 
