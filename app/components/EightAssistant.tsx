@@ -1,10 +1,20 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 
 type EightMessage = {
   role: "user" | "eight";
   text: string;
+  trace?: AgentTraceStep[];
+};
+
+type AgentTraceStep = {
+  step: number;
+  phase: "plan" | "tool" | "answer";
+  label: string;
+  status: "completed" | "failed";
+  detail: string;
+  elapsedMs: number;
 };
 
 export default function EightAssistant() {
@@ -14,11 +24,17 @@ export default function EightAssistant() {
   const [messages, setMessages] = useState<EightMessage[]>([
     {
       role: "eight",
-      text: "I’m Eight — your AI security copilot. Ask me about appsec, LLM testing, threat modeling, or what to do next.",
+      text: "I’m Eight — your autonomous security agent. Give me an objective and I’ll plan the work, inspect the right resources, and return a grounded execution path.",
     },
   ]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const openAssistant = () => setOpen(true);
+    window.addEventListener("twentyeight:open-assistant", openAssistant);
+    return () => window.removeEventListener("twentyeight:open-assistant", openAssistant);
+  }, []);
 
   const pageContext = useMemo(
     () =>
@@ -40,20 +56,14 @@ export default function EightAssistant() {
     setMessages((current) => [...current, { role: "user", text: question }]);
 
     try {
-      const response = await fetch("/api/atomix/analyze", {
+      const response = await fetch("/api/atomix/agent", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           phrase,
-          tool: "eight-chat",
-          payload: {
-            question,
-            context: {
-              page: pageContext,
-              assistant: "Eight global site copilot",
-            },
-            history: messages.slice(-8),
-          },
+          objective: question,
+          context: { page: pageContext },
+          history: messages.slice(-8),
         }),
       });
       const data = await response.json();
@@ -64,7 +74,7 @@ export default function EightAssistant() {
 
       setMessages((current) => [
         ...current,
-        { role: "eight", text: formatEightResponse(data) },
+        { role: "eight", text: String(data.answer ?? "Agent run completed."), trace: Array.isArray(data.trace) ? data.trace : [] },
       ]);
     } catch (chatError) {
       setError(chatError instanceof Error ? chatError.message : "Eight failed.");
@@ -83,11 +93,11 @@ export default function EightAssistant() {
               <EightOrb size="lg" />
               <div>
                 <p className="text-xs uppercase tracking-[0.24em] text-cyan-200">
-                  Atomix Copilot
+                  Agentic security layer
                 </p>
                 <h2 className="text-2xl font-black text-white">Eight</h2>
                 <p className="text-xs text-gray-300">
-                  Site-wide AI security assistant
+                  Plans · uses tools · verifies · answers
                 </p>
               </div>
             </div>
@@ -107,6 +117,21 @@ export default function EightAssistant() {
                   {message.role === "eight" ? "Eight" : "You"}
                 </p>
                 <p className="whitespace-pre-wrap">{message.text}</p>
+                {message.trace && message.trace.length > 0 && (
+                  <details className="mt-3 border-t border-cyan-300/10 pt-2">
+                    <summary className="cursor-pointer text-[10px] font-bold uppercase tracking-wider text-cyan-300">
+                      Agent trace · {message.trace.filter((step) => step.phase === "tool").length} tools
+                    </summary>
+                    <ol className="mt-2 space-y-2">
+                      {message.trace.map((step) => (
+                        <li key={step.step} className="flex gap-2 text-[11px] text-gray-400">
+                          <span className={step.status === "completed" ? "text-emerald-400" : "text-red-400"}>{step.status === "completed" ? "✓" : "!"}</span>
+                          <span><strong className="text-gray-200">{step.label}</strong> · {step.detail}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </details>
+                )}
               </div>
             ))}
           </div>
@@ -123,7 +148,7 @@ export default function EightAssistant() {
               <input
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
-                placeholder="Ask Eight anything security..."
+                placeholder="Give Eight an objective..."
                 required
                 className="min-w-0 flex-1 rounded-xl border border-gray-800 bg-black px-4 py-3 text-sm text-white outline-none placeholder:text-gray-600 focus:border-cyan-400"
               />
@@ -132,7 +157,7 @@ export default function EightAssistant() {
                 disabled={loading}
                 className="rounded-xl bg-cyan-300 px-4 py-3 text-sm font-bold text-black transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {loading ? "..." : "Ask"}
+                {loading ? "Running…" : "Run"}
               </button>
             </div>
             {error && <p className="text-xs text-red-300">{error}</p>}
@@ -148,7 +173,7 @@ export default function EightAssistant() {
       >
         <EightOrb size="sm" />
         <span className="pr-1 text-sm font-bold text-cyan-100">
-          {open ? "Close Eight" : "Ask Eight"}
+          {open ? "Close Eight" : "Run Eight"}
         </span>
       </button>
     </div>
@@ -168,29 +193,4 @@ function EightOrb({ size }: { size: "sm" | "lg" }) {
       <span className="eight-ring absolute inset-1 rounded-xl border border-cyan-300/20" />
     </div>
   );
-}
-
-function formatEightResponse(data: unknown) {
-  const envelope = isRecord(data) ? data : {};
-  const body = isRecord(envelope.analysis) ? envelope.analysis : envelope;
-  const summary = String(
-    body.summary ?? "Eight generated a preliminary security response."
-  );
-  const nextActions = arrayOfStrings(body.nextActions);
-  const testIdeas = arrayOfStrings(body.testIdeas ?? body.attackPrompts);
-
-  return [summary, ...nextActions, ...testIdeas]
-    .filter(Boolean)
-    .map((line, index) => (index === 0 ? line : `• ${line}`))
-    .join("\n");
-}
-
-function arrayOfStrings(value: unknown) {
-  return Array.isArray(value)
-    ? value.map((item) => String(item)).filter(Boolean).slice(0, 8)
-    : [];
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }

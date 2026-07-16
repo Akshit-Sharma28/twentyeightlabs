@@ -4,6 +4,7 @@ import "./globals.css";
 import AtomicCursor from "./components/AtomicCursor";
 import EightAssistant from "./components/EightAssistant";
 import ScrollWatcher from "./components/scroll";
+import AtomixPet from "./components/AtomixPet";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,6 +47,7 @@ export default function RootLayout({
         {children}
 
         <EightAssistant />
+        <AtomixPet />
         <AtomicCursor />
         <ScrollWatcher />
       </body>
